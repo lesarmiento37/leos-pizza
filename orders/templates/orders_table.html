@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orders Table</title>
+</head>
+<body>
+    <h1>All Orders</h1>
+    <table border="1">
+        <tr>
+            <th>Pizza Type</th>
+            <th>Comments</th>
+            <th>Order Date</th>
+        </tr>
+        {% for order in orders %}
+        <tr>
+            <td>{{ order.pizza_type }}</td>
+            <td>{{ order.comments }}</td>
+            <td>{{ order.created_at }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <br>
+    
+    <!-- Go Home Button -->
+    <a href="{% url 'place_order' %}">
+        <button>Go Home</button>
+    </a>
+</body>
+</html>
+
