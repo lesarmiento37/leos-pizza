@@ -1,3 +1,4 @@
+
 # Leo's Pizza Web Application Deployment Guide
 
 This README provides detailed steps to deploy the Leo's Pizza web application using Django and AWS Elastic Kubernetes Service (EKS). The application allows users to place pizza orders and enables administrators to view the orders.
@@ -24,3 +25,119 @@ Before you start the deployment, ensure you have the following:
 
 ### 1. Setup the EKS Cluster
 
+Create an Amazon EKS cluster where the application will be deployed:
+
+```bash
+eksctl create cluster --name pizza-cluster --region us-east-1 --nodegroup-name pizza-nodes --node-type t3.medium --nodes 3
+```
+
+### 2. Dockerize the Django Application
+
+Package the Django application into a Docker container:
+
+1. **Navigate to your project directory** where the Django project is located.
+
+2. **Create a Dockerfile**:
+
+   ```Dockerfile
+   FROM python:3.8-slim
+   WORKDIR /app
+   COPY . /app
+   RUN pip install -r requirements.txt
+   EXPOSE 8000
+   CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+   ```
+
+3. **Build the Docker image**:
+
+   ```bash
+   docker build -t leos-pizza-app .
+   ```
+
+4. **Push the Docker image to Docker Hub** (replace `yourusername` with your Docker Hub username):
+
+   ```bash
+   docker tag leos-pizza-app yourusername/leos-pizza-app:latest
+   docker push yourusername/leos-pizza-app:latest
+   ```
+
+### 3. Deploy Django Application on Kubernetes
+
+Deploy your application using kubectl:
+
+1. **Create a deployment.yaml file** for the Kubernetes deployment:
+
+   ```yaml
+   apiVersion: apps/v1
+   kind: Deployment
+   metadata:
+     name: leos-pizza-deployment
+   spec:
+     replicas: 3
+     selector:
+       matchLabels:
+         app: leos-pizza
+     template:
+       metadata:
+         labels:
+           app: leos-pizza
+       spec:
+         containers:
+         - name: leos-pizza
+           image: yourusername/leos-pizza-app:latest
+           ports:
+           - containerPort: 8000
+   ```
+
+2. **Deploy the application**:
+
+   ```bash
+   kubectl apply -f deployment.yaml
+   ```
+
+3. **Expose the application using a LoadBalancer**:
+
+   ```yaml
+   apiVersion: v1
+   kind: Service
+   metadata:
+     name: leos-pizza-service
+   spec:
+     type: LoadBalancer
+     ports:
+       - port: 80
+         targetPort: 8000
+     selector:
+       app: leos-pizza
+   ```
+
+   Apply the service configuration:
+
+   ```bash
+   kubectl apply -f service.yaml
+   ```
+
+### 4. Verify the Application Deployment
+
+Check that the deployment is running and the service is exposed:
+
+1. **Get the service details**:
+
+   ```bash
+   kubectl get svc leos-pizza-service
+   ```
+
+2. **Access the application** through the external IP or DNS name provided by the LoadBalancer.
+
+## Troubleshooting
+
+If you encounter issues during deployment, check the following:
+
+- **Pod Status**: Ensure all pods are in `Running` state (`kubectl get pods`).
+- **Logs**: Check logs for any application or deployment errors (`kubectl logs <pod_name>`).
+
+## Conclusion
+
+Following this guide, you should be able to deploy the Leo's Pizza web application on AWS EKS successfully. This setup provides a scalable environment suitable for production usage.
+
+For further customization or additional features, refer to the official Django and Kubernetes documentation.
