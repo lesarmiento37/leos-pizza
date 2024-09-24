@@ -43,24 +43,23 @@ Package the Django application into a Docker container:
 2. **Create a Dockerfile**:
 
    ```Dockerfile
-Use an official Python runtime as a parent image
-FROM python:3.9-slim
-WORKDIR /app
-COPY requirements.txt /app/
-RUN pip install --no-cache-dir -r requirements.txt
-COPY . /app/
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
-RUN python manage.py migrate
-COPY create_admin.py /app/create_admin.py
-RUN python manage.py shell < create_admin.py
-RUN python manage.py collectstatic --noinput
-ENV DJANGO_SUPERUSER_USERNAME=leonardo
-ENV DJANGO_SUPERUSER_PASSWORD=leo123
-ENV DJANGO_SUPERUSER_EMAIL=leonardo@example.com
-EXPOSE 8000
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
-
+        Use an official Python runtime as a parent image
+        FROM python:3.9-slim
+        WORKDIR /app
+        COPY requirements.txt /app/
+        RUN pip install --no-cache-dir -r requirements.txt
+        COPY . /app/
+        ENV PYTHONDONTWRITEBYTECODE 1
+        ENV PYTHONUNBUFFERED 1
+        RUN python manage.py migrate
+        COPY create_admin.py /app/create_admin.py
+        RUN python manage.py shell < create_admin.py
+        RUN python manage.py collectstatic --noinput
+        ENV DJANGO_SUPERUSER_USERNAME=leonardo
+        ENV DJANGO_SUPERUSER_PASSWORD=leo123
+        ENV DJANGO_SUPERUSER_EMAIL=leonardo@example.com
+        EXPOSE 8000
+        CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
    ```
 
 3. **Build the Docker image**:
