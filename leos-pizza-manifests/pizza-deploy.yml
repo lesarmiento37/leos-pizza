@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: leos-pizza-deployment
+  namespace: pizza
+  labels:
+    app: leos-pizza
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: leos-pizza
+  template:
+    metadata:
+      labels:
+        app: leos-pizza
+    spec:
+      containers:
+      - name: leos-pizza
+        image: 055992398095.dkr.ecr.us-east-1.amazonaws.com/pizza-hub:leos-pizza-1.0 
+        ports:
+        - containerPort: 8000  
