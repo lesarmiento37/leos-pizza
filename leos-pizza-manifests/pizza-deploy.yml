@@ -17,6 +17,6 @@ spec:
     spec:
       containers:
       - name: leos-pizza
-        image: 055992398095.dkr.ecr.us-east-1.amazonaws.com/pizza-hub:leos-pizza-1.2
+        image: 055992398095.dkr.ecr.us-east-1.amazonaws.com/pizza-hub:leos-pizza-1.4
         ports:
         - containerPort: 8000  
