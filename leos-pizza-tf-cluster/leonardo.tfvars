@@ -1,0 +1,12 @@
+public_subnet_cidr     = "subnet-0375dadada"
+private_subnets_cidr   = ["subnet-0adadad", "subnet-09fdfgdggdg", "subnet-fhfhfhfh"]
+availability_zones     = ["us-east-1a", "us-east-1b", "us-east-1c"]
+ecr_name               = "pizza-hub"
+eks_node_name          = "pizza-node"
+node_disk              = "30"
+node_instance_type     = ["t3.medium"]
+cluster_name           = "pizza-cluster"
+cluster_version        = "1.30"
+vpc_id                 = "vpc-fhhfdhnhhh"
+environment            = "sandbox"
+region                 = "us-east-1"
