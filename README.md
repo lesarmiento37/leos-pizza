@@ -43,7 +43,7 @@ Package the Django application into a Docker container:
 2. **Create a Dockerfile**:
 
    ```Dockerfile
-   # Use an official Python runtime as a parent image
+Use an official Python runtime as a parent image
 FROM python:3.9-slim
 WORKDIR /app
 COPY requirements.txt /app/
