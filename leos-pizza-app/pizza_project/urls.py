@@ -16,8 +16,10 @@ Including another URLconf
 """
 from django.urls import path
 from orders.views import place_order, orders_table
+from django.contrib import admin
 
 urlpatterns = [
+    path('admin/', admin.site.urls),
     path('', place_order, name='place_order'),
     path('orders/', orders_table, name='orders_table'),
 ]
