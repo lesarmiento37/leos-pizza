@@ -287,15 +287,18 @@ Initially, the number of pods was set to the default minimum of 1 replicas.
 As the load increased and CPU usage exceeded 50%, the HPA started to incrementally scale up the pods.
 The autoscaler continued scaling up the pods until it reached the maximum configured limit of 10 replicas.
 
-The number of replicas change:
+The number of replicas has changed.
 
 
 ![image](https://github.com/user-attachments/assets/7227544a-5204-4d2a-84a4-5d647a3c22d0)
 The hpa metrics:
 
+
 ![image](https://github.com/user-attachments/assets/8f7b88e9-20b0-41a3-9d31-04d2be6d8ef3)
 
-After the test the load tasks are stopped and the number of replicas return to 1:
+
+After the workload-generating tasks were stopped, it is evident that the HPA returns to its initial charge of a pod. 
+
 
 ![image](https://github.com/user-attachments/assets/93ab5a00-6a10-40a6-878f-d0b9475a0f1a)
 
@@ -315,3 +318,4 @@ Watch how the HPA scales the number of replicas based on CPU usage.
 Following this guide, you should be able to deploy the Leo's Pizza web application on AWS EKS successfully. This setup provides a scalable environment suitable for production usage.
 
 For further customization or additional features, refer to the official Django and Kubernetes documentation.
+ 
