@@ -94,68 +94,9 @@ kubectl get svc leos-pizza-service
 
 You should be able to access the application via the LoadBalancer’s external IP.
 
-## Conclusion
-
 By following these steps, you have set up an automated pipeline using AWS CodeBuild to deploy the Leo's Pizza web application to Amazon EKS. Terraform is used to manage the infrastructure, ensuring that the CodeBuild project is correctly configured.
 
-
-### 3. Deploy Django Application on Kubernetes
-
-Deploy your application using kubectl:
-
-1. **Create a deployment.yaml file** for the Kubernetes deployment:
-
-   ```yaml
-   apiVersion: apps/v1
-   kind: Deployment
-   metadata:
-     name: leos-pizza-deployment
-   spec:
-     replicas: 3
-     selector:
-       matchLabels:
-         app: leos-pizza
-     template:
-       metadata:
-         labels:
-           app: leos-pizza
-       spec:
-         containers:
-         - name: leos-pizza
-           image: yourusername/leos-pizza-app:latest
-           ports:
-           - containerPort: 8000
-   ```
-
-2. **Deploy the application**:
-
-   ```bash
-   kubectl apply -f deployment.yaml
-   ```
-
-3. **Expose the application using a LoadBalancer**:
-
-   ```yaml
-   apiVersion: v1
-   kind: Service
-   metadata:
-     name: leos-pizza-service
-   spec:
-     type: LoadBalancer
-     ports:
-       - port: 80
-         targetPort: 8000
-     selector:
-       app: leos-pizza
-   ```
-
-   Apply the service configuration:
-
-   ```bash
-   kubectl apply -f service.yaml
-   ```
-
-### 4. Verify the Application Deployment
+### Verify the Application Deployment
 
 Check that the deployment is running and the service is exposed:
 
