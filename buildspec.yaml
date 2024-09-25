@@ -1,0 +1,41 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - cd leos-pizza-app
+      - echo Installing dependencies...
+      - curl -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.21.14/2022-06-16/bin/linux/amd64/kubectl
+      - chmod +x ./kubectl
+      - mv ./kubectl /usr/local/bin/kubectl
+      - curl --silent --location "https://github.com/weaveworks/eksctl/releases/download/v0.93.0/eksctl_Linux_amd64.tar.gz" | tar xz -C /tmp
+      - mv /tmp/eksctl /usr/local/bin
+      - curl -Lo aws-iam-authenticator https://github.com/kubernetes-sigs/aws-iam-authenticator/releases/download/v0.5.3/aws-iam-authenticator_0.5.3_linux_amd64
+      - chmod +x ./aws-iam-authenticator
+      - mv ./aws-iam-authenticator /usr/local/bin
+
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - aws --version
+      - $(aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin XXXXXXXX.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com)
+      - aws eks --region $AWS_DEFAULT_REGION update-kubeconfig --name $EKS_CLUSTER_NAME
+      - echo Build starting...
+
+  build:
+    commands:
+      - echo Building the Docker image...
+      - docker build -t leos-pizza-app .
+      - echo Tagging the Docker image...
+      - kubectl config set-context --current --namespace=pizza
+      - NEW_VERSION=$(git log --format="%h" -n 1)-$(date '+%d%H%M%S')
+      - echo "New Version $NEW_VERSION"
+      - docker build -t leos-pizza-app:v$NEW_VERSION .
+      - docker tag leos-pizza-app:v$NEW_VERSION XXXXXXXX.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/leos-pizza-app:v$NEW_VERSION
+      - docker push XXXXXXX.dkr.ecr.us-east-1.amazonaws.com/leos-pizza-app:v$NEW_VERSION
+  post_build:
+    commands:
+      - echo Deploying the application to EKS...
+      - kubectl -n pizza --record deployment.apps/$SERVICE_NAME set image deployment.v1.apps/leos-pizza XXXXXXXX.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/leos-pizza-app:v$NEW_VERSION
+      - kubectl get pods
+

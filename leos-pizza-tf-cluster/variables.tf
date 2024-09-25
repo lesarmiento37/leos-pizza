@@ -47,3 +47,16 @@ variable "vpc_id"{
 variable "region" {
   description = "AWS Region"
 }
+
+variable "repo_url" {
+  type        = string
+  default     = ""
+  description = "description"
+}
+
+variable "repo_branch" {
+  type        = string
+  default     = ""
+  description = "description"
+}
+
