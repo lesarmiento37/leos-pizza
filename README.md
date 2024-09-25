@@ -288,8 +288,11 @@ As the load increased and CPU usage exceeded 50%, the HPA started to incremental
 The autoscaler continued scaling up the pods until it reached the maximum configured limit of 10 replicas.
 
 The number of replicas change:
+
+
 ![image](https://github.com/user-attachments/assets/7227544a-5204-4d2a-84a4-5d647a3c22d0)
 The hpa metrics:
+
 ![image](https://github.com/user-attachments/assets/8f7b88e9-20b0-41a3-9d31-04d2be6d8ef3)
 
 After the test the load tasks are stopped and the number of replicas return to 1:
