@@ -28,6 +28,10 @@ resource "aws_codebuild_project" "pizza" {
       name  = "AWS_DEFAULT_REGION"
       value = "us-east-1"
     }
+    environment_variable {
+      name  = "EKS_CLUSTER_NAME"
+      value = "pizza-cluster"
+    }
   }
   logs_config {
     cloudwatch_logs {

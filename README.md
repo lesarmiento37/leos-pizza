@@ -62,18 +62,42 @@ Package the Django application into a Docker container:
         CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
    ```
 
-3. **Build the Docker image**:
+## Overview of the Deployment Pipeline
 
-   ```bash
-   docker build -t leos-pizza-app .
-   ```
+1. **CodeBuild Setup**:
+   - The buildspec.yaml defines the build pipeline.
+   - CodeBuild will build the Docker image, push it to ECR, and deploy the application to EKS.
 
-4. **Push the Docker image to Docker Hub** (replace `yourusername` with your Docker Hub username):
+2. **Terraform Setup**:
+   - Terraform is used to create the CodeBuild project and other AWS resources.
+   
+3. **Buildspec.yaml**:
+   - The `buildspec.yaml` defines the stages of the build, including Docker image build, ECR push, and EKS deployment.
 
-   ```bash
-   docker tag leos-pizza-app yourusername/leos-pizza-app:latest
-   docker push yourusername/leos-pizza-app:latest
-   ```
+### 1. Trigger the Build
+
+Once the CodeBuild project is created with Terraform and the `buildspec.yaml` file is in the repository, you can trigger the build:
+
+1. Go to the AWS CodeBuild console.
+2. Select the project created by Terraform (`leos-pizza-build`).
+3. Start the build.
+
+CodeBuild will pull the latest code from your repository, build the Docker image, push it to ECR, and deploy it to EKS.
+
+### 2. Verify the Deployment
+
+After the build is complete, check the status of your EKS deployment by running:
+
+```bash
+kubectl get svc leos-pizza-service
+```
+
+You should be able to access the application via the LoadBalancer’s external IP.
+
+## Conclusion
+
+By following these steps, you have set up an automated pipeline using AWS CodeBuild to deploy the Leo's Pizza web application to Amazon EKS. Terraform is used to manage the infrastructure, ensuring that the CodeBuild project is correctly configured.
+
 
 ### 3. Deploy Django Application on Kubernetes
 
