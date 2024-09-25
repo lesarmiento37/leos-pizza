@@ -19,4 +19,9 @@ spec:
       - name: leos-pizza
         image: 055992398095.dkr.ecr.us-east-1.amazonaws.com/pizza-hub:leos-pizza-1.4
         ports:
-        - containerPort: 8000  
+        - containerPort: 8000
+        resources:
+          requests:
+            cpu: "100m"  
+          limits:
+            cpu: "500m" 
